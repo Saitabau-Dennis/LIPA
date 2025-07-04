@@ -1,39 +1,34 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Sidebar from './Sidebar';
-import PaymentLinksTable from './PaymentLinksTable';
-import CreateLinkModal from './CreateLinkModal';
-import { Plus } from 'lucide-react';
-import Button from '../shared/Button';
+import DashboardHome from './DashboardHome';
+import Links from './Links';
+import Settings from './Settings';
 
 export default function Dashboard() {
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState('dashboard');
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'dashboard':
+        return <DashboardHome setActiveTab={setActiveTab} />;
+      case 'links':
+        return <Links />;
+      case 'settings':
+        return <Settings />;
+      default:
+        return <DashboardHome setActiveTab={setActiveTab} />;
+    }
+  };
 
   return (
     <div className="min-h-screen bg-primary-bg flex">
-      <Sidebar />
+      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
       
       <main className="flex-1 ml-64">
         <div className="p-8">
-          <div className="flex items-center justify-between mb-8">
-            <h1 className="text-2xl font-bold text-primary-text">Your Payment Links</h1>
-            <Button
-              onClick={() => setIsCreateModalOpen(true)}
-              icon={Plus}
-            >
-              Create New Link
-            </Button>
-          </div>
-
-          <PaymentLinksTable />
+          {renderContent()}
         </div>
       </main>
-
-      {isCreateModalOpen && (
-        <CreateLinkModal
-          isOpen={isCreateModalOpen}
-          onClose={() => setIsCreateModalOpen(false)}
-        />
-      )}
     </div>
   );
 }

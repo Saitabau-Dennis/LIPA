@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, Upload, MessageSquare } from 'lucide-react';
+import toast from 'react-hot-toast';
 import Button from '../shared/Button';
 import Input from '../shared/Input';
 
@@ -19,11 +20,17 @@ export default function CreateLinkModal({ isOpen, onClose }: CreateLinkModalProp
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    setIsSubmitting(false);
-    onClose();
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      toast.success('Payment link created successfully!');
+      onClose();
+    } catch (error) {
+      toast.error('Failed to create payment link. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleDrag = (e: React.DragEvent) => {
